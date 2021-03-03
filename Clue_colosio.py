@@ -23,7 +23,14 @@ def main():
     
     imprimir_header("Has utilizado todas tus preguntas, es momento de decidir quien fue el culpable")
 
-       
+    Sospecha = tuple(acusar())
+    
+    if Sospecha == asesino:
+        print("Acertaste")
+    else:
+        print("Fallaste")
+    
+    
 def preguntas():
     
     PREGUNTAS_DISPONIBLES = 5
@@ -51,7 +58,21 @@ def preguntas():
             
             print(validar_dato(entrada, entrada_2))
             
-
+def acusar():
+    Sospecha = []
+    
+    for categoria in range(3):
+        imprimir_header(elemento[categoria])
+        for elementos in range(5):
+            print(str(elementos + 1) + ". " + datos[categoria][elementos])
+        
+        
+        indice = eval(input("Introduce tu suposicion. ")) - 1
+        Sospecha.append(datos[categoria][int(indice)])
+        
+    return Sospecha
+    
+        
 def validar_dato(entrada, entrada_2):
     
     if entrada > 5 or entrada < 1:
@@ -70,6 +91,5 @@ def imprimir_header(mensaje):
     print(mensaje)
     print("**********************************************************************************")
   
-    
-  
+ 
 main()
