@@ -1,17 +1,24 @@
 from random import randrange
 
-
+DICT_ELEMENTOS = {0: "Sospechosos", 1: "Lugares", 2: "Armas"}
     
-datos = (("Carlos S", "Mario A", "Ernesto Z", "Comandante M", "Diego M"),
-         ("Lomas taurinas", "Aeropuerto", "Mitin", "Sede del partido", "Coche"),
-         ("Pistola", "Cuchillo", "Playera del PRI", "Taco envenenado", "Carro de tamales"))
-
-elemento = {0: "Sospechosos:", 1: "Lugares", 2: "Armas"}
+datos = (["Carlos S", "Mario A", "Ernesto Z", "Comandante M", "Joaquin G"],
+         ["Lomas taurinas", "Aeropuerto", "Mitin", "Sede del partido", "Coche"],
+         ["Pistola", "Cuchillo", "Playera del PRI", "Taco envenenado", "Carro de tamales"])
 
 asesino = (datos[0][randrange(0,5)], datos[1][randrange(0,5)], datos[2][randrange(0,5)])
 
-print(asesino)
-    
+personas_inocentes = datos[0].copy()
+personas_inocentes.remove(asesino[0])
+
+lugares_inocentes = datos[1].copy()
+lugares_inocentes.remove(asesino[1])
+
+objetos_inocentes = datos[2].copy()
+objetos_inocentes.remove(asesino[2])
+
+INOCENTES = (personas_inocentes, lugares_inocentes, objetos_inocentes)
+
 def main():
     imprimir_header("Tijuana, México. 23 de marzo de 1994\n" +
           "Luis Donaldo Colosio ha sido asesinado.\n" +
@@ -34,55 +41,84 @@ def main():
 def preguntas():
     
     PREGUNTAS_DISPONIBLES = 5
-    
+
     for preguntas in range(PREGUNTAS_DISPONIBLES):
         
         imprimir_header("Preguntas restantes: " + str(PREGUNTAS_DISPONIBLES) + "\n" +
-              "1. Preguntar acerca de sospechoso\n" +
-              "2. Preguntar acerca de lugar\n" + 
-              "3. Preguntar acerca de arma")
+                        "1. Preguntar acerca de sospechoso\n" +
+                        "2. Preguntar acerca de lugar\n" + 
+                        "3. Preguntar acerca de arma"
+                        )
         
-        entrada = eval(input("Introduce un dato. "))
+        categoria = eval(input("Introduce un dato. ")) 
         
-        if entrada > 3 or entrada < 1:
+        if categoria > 3 or categoria < 1:
             print("Opcion invalida")
             
         else:
             PREGUNTAS_DISPONIBLES = PREGUNTAS_DISPONIBLES - 1
             
-            imprimir_header(elemento[entrada-1])
+            imprimir_header(DICT_ELEMENTOS[categoria-1])
+            
             for elementos in range(5):
-                print(str(elementos + 1) + ". " + datos[entrada-1][elementos])
+                print(str(elementos + 1) + ". " + datos[categoria-1][elementos])
             
-            entrada_2 = eval(input("Introduce un dato. "))
+            eleccion = eval(input("Introduce un dato. "))
             
-            print(validar_dato(entrada, entrada_2))
+            validar_dato(categoria, eleccion)
+  
             
 def acusar():
     Sospecha = []
     
-    for categoria in range(3):
-        imprimir_header(elemento[categoria])
+    for categoria_datos in range(3):
+        
+        imprimir_header(DICT_ELEMENTOS[categoria_datos])
+        
         for elementos in range(5):
-            print(str(elementos + 1) + ". " + datos[categoria][elementos])
+            
+            print(str(elementos + 1) + ". " + datos[categoria_datos][elementos])
         
         
         indice = eval(input("Introduce tu suposicion. ")) - 1
-        Sospecha.append(datos[categoria][int(indice)])
+        Sospecha.append(datos[categoria_datos][int(indice)])
         
     return Sospecha
+
     
+def generar_frases(culpable, categoria, eleccion):
+    pistas = randrange(1,4)
+
+    if culpable:
+        if DICT_ELEMENTOS[categoria-1] == "Sospechosos":
+           print("No se puede ubicar a " + datos[categoria - 1][eleccion - 1] + " en el momento del asesinato")
+        else:
+            print("Se encontraron rastros de sangre en " + datos[categoria - 1][eleccion - 1])
+    
+    else:
+        if DICT_ELEMENTOS[categoria-1] == "Sospechosos:":
+            print(datos[categoria - 1][eleccion - 1] + " tiene una coartada solida.")
+        else:
+            print("No se encontraron rastros de sangre en " + datos[categoria - 1][eleccion - 1] +
+                    ". Testigos afirman que no vieron nada raro.")
         
-def validar_dato(entrada, entrada_2):
+                    
+        print("La investigacion tambien descarto:")
+        for i in range(1,pistas+1):
+            cat_pista = randrange(3)
+            print(DICT_ELEMENTOS[cat_pista] + ": " + INOCENTES[cat_pista][randrange(4)])
+
     
-    if entrada > 5 or entrada < 1:
+def validar_dato(categoria, eleccion):
+    
+    if categoria > 5 or categoria < 1:
         print("Opcion invalida")
         
     else:
-        if datos[entrada - 1][entrada_2 - 1] == asesino[entrada - 1]:
-            return "Si"
+        if datos[categoria - 1][eleccion - 1] == asesino[categoria - 1]:
+            generar_frases(True, categoria, eleccion)
         else:
-            return "No"
+            generar_frases(False, categoria, eleccion)
     
     
 def imprimir_header(mensaje):
@@ -91,5 +127,5 @@ def imprimir_header(mensaje):
     print(mensaje)
     print("**********************************************************************************")
   
- 
+
 main()
