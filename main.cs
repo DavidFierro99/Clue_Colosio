@@ -24,12 +24,24 @@ class MainClass {
 
         // Configuracion del asesino de la partida
         ASESINO = new string[] {DATOS[0, RAND.Next(0,5)], DATOS[1, RAND.Next(0,5)], DATOS[2, RAND.Next(0,5)]};
+        
+        Console.WriteLine("Colosio fue asesinado por " + ASESINO[0] + " en " + ASESINO[1] + " con " + ASESINO[2]);
+
 
         preguntas();
 
         Console.WriteLine("Has utilizado todas tus preguntas, es momento de decidir quien fue el culpable");
 
         acusar();
+
+        if (sospecha[0] == ASESINO[0] && sospecha[1] == ASESINO[1] && sospecha[2] == ASESINO[2])
+        {
+            Console.WriteLine("Acertaste");
+        }
+        else
+        {
+            Console.WriteLine("Fallaste");
+        }
 
         Console.WriteLine("Colosio fue asesinado por " + ASESINO[0] + " en " + ASESINO[1] + " con " + ASESINO[2]);
 
@@ -115,10 +127,11 @@ class MainClass {
                 Console.WriteLine("Opcion invalida");
             }
             else
-            {   
-                categoria++;
+            {     
                 indice--;
                 sospecha[categoria] = DATOS[categoria, indice];
+
+                categoria++;
             }
         
         }
