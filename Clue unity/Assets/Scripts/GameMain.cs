@@ -198,6 +198,32 @@ public class GameMain : MonoBehaviour
      
     public void Salir()
     {
+        /* 
+         * :descripcion:    Permite salir del juego
+         * :param:          None
+         * :return:         None
+         */
+        
         Application.Quit();
+    }
+
+
+    public void Reiniciar()
+    {
+        /* 
+         * :descripcion:    Reinicia todas las variables necesarias para iniciar una nueva partida
+         * :param:          None
+         * :return:         None
+         */
+
+        // La funcion SetValores vuelve a configurar todas las variables que se guardan en el Sigleton
+        GameSingleton.Instance.SetValores();
+        
+        // Se reinica el contador de preguntas y el indice para la acusacion
+        PREGUNTAS_DISPONBILES = 5;
+        n_acusacion = 0;
+
+        // Se carga la escena Main
+        SceneManager.LoadScene("Main");
     }
 }
