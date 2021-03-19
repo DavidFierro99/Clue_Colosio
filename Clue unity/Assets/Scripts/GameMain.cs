@@ -125,6 +125,7 @@ public class GameMain : MonoBehaviour
          * :param eleccion: String del elemento que selecciono el jugador, puede ser persona, lugar o arma
          * :return:         None
          */
+
         if (FIN == false)
         {
             if (eleccion == ASESINO[sospecha_actual])

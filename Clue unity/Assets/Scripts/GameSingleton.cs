@@ -15,13 +15,11 @@ public class GameSingleton : MonoBehaviour
 
     public bool FIN;
 
-    private static GameSingleton _instance;
-
     public static GameSingleton Instance { get;  set; }
 
     void Awake()
     {
-        if (Instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
         }
