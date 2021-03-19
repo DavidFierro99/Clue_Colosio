@@ -1,14 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
 using UnityEngine;
 
 public class GameSingleton : MonoBehaviour
 {
-    static string[,] DATOS = new string[,] {{"Carlos S", "Mario A", "Ernesto Z", "Comandante M", "Joaquin G"},
-                                            {"Lomas taurinas", "Aeropuerto", "Mitin", "Sede del partido", "Coche",},
-                                            {"Pistola", "Cuchillo", "Playera del PRI", "Taco envenenado", "Carro de tamales"}};
+    static string[] SOSPECHOSOS = new string[] { "Carlos S", "Mario A", "Ernesto Z", "Subcomandante M", "Joaquin G" };
+
+    static string[] LUGARES = new string[] { "Lomas taurinas", "Aeropuerto", "Mitin", "Sede del partido", "Coche" };
+
+    static string[] ARMAS = new string[] { "Pistola", "Cuchillo", "Playera del partido", "Taco envenenado", "Olla de pozole" };
 
     public string[] ASESINO;
+
+    public string[][] INOCENTES;
 
     private static GameSingleton _instance;
 
@@ -23,12 +26,17 @@ public class GameSingleton : MonoBehaviour
         else
         {
             DontDestroyOnLoad(this.gameObject);
-            Debug.Log("Inside singleton");
 
-            ASESINO = new string[]{DATOS[0, Random.Range(0, 5)],
-                                   DATOS[1, Random.Range(0, 5)],
-                                   DATOS[2, Random.Range(0, 5)],
-                                   };
+            ASESINO = new string[] {SOSPECHOSOS[Random.Range(0, 5)],
+                                    LUGARES[Random.Range(0, 5)],
+                                    ARMAS[Random.Range(0, 5)],
+                                    };
+
+            INOCENTES = new string[][] {SOSPECHOSOS.Where(o=> o != ASESINO[0]).ToArray(),
+                                        LUGARES.Where(o=> o != ASESINO[1]).ToArray(),
+                                        ARMAS.Where(o=> o != ASESINO[2]).ToArray()};
+
+            Debug.Log(ASESINO[0] + "/" + ASESINO[1] + "/" + ASESINO[2]);
 
             Instance = this;
         }

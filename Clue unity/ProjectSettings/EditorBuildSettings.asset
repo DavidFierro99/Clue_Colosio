@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sospechosos.unity
     guid: 2aa1697c11fec024aa38d1dc807ca894
+  - enabled: 1
+    path: Assets/Scenes/Validar.unity
+    guid: 64836a63f07ccb14491019dc74ed4897
   m_configObjects: {}
