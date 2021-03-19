@@ -6,7 +6,12 @@ using UnityEngine.UI;
 
 
 public class GameMain : MonoBehaviour
-{   
+{
+    //
+    static bool FIN;
+
+    static int n_acusacion = 0;
+
     // Numero de preguntas que se tiene en el juego
     static int PREGUNTAS_DISPONBILES = 5;
 
@@ -17,7 +22,10 @@ public class GameMain : MonoBehaviour
     static Text n_Text;
 
     // Texto que muestra la frase de sospecha
-    static Text texto_sospecha;
+    static Text textbox;
+
+    // Texto que muestra la frase de sospecha
+    static Text textbox_fin;
 
     // Indice que indica que se está sospechando, persona, lugar o arma
     static int sospecha_actual = -1;
@@ -32,7 +40,7 @@ public class GameMain : MonoBehaviour
     public string[][] INOCENTES;
 
     // Arreglo donde se guarda la acusacion generada por el jugador
-    static string[] ACUSACION;
+    static string[] ACUSACION = new string[3] { "", "", "" };
 
     void Start()
     {
@@ -46,6 +54,7 @@ public class GameMain : MonoBehaviour
         // se llamen posteriormente el Singleton hace que se conserven los primeros valores
         ASESINO = GameSingleton.Instance.ASESINO;
         INOCENTES = GameSingleton.Instance.INOCENTES;
+        FIN = GameSingleton.Instance.FIN;
 
 
         if (SceneManager.GetActiveScene().name == "Main")
@@ -54,15 +63,27 @@ public class GameMain : MonoBehaviour
 
             n_Text = GameObject.Find("/Canvas/n_preguntas").GetComponent<Text>();
             n_Text.text = PREGUNTAS_DISPONBILES.ToString();
+
+            if (PREGUNTAS_DISPONBILES == 0 && !FIN)
+            {
+                GameSingleton.Instance.FIN = true;
+
+                SceneManager.LoadScene("Acusacion");
+            }
         }
         else if (SceneManager.GetActiveScene().name == "Validar")
         {
-            // La escena a cargar es Validar, muestra el resultado de la sospecha en texto_sospecha
-            texto_sospecha = GameObject.Find("/Canvas/texto_sos").GetComponent<Text>();
-            texto_sospecha.text = frase;
+            // La escena a cargar es Validar, muestra el resultado de la sospecha en textbox
+            textbox = GameObject.Find("/Canvas/texto_sos").GetComponent<Text>();
+            textbox.text = frase;
+        }
+        else if (SceneManager.GetActiveScene().name == "Fin")
+        {
+            textbox_fin = GameObject.Find("/Canvas/texto_fin").GetComponent<Text>();
+            textbox_fin.text = frase;
         }
     }
-
+    
 
     public void Preguntar(int escena)
     {
@@ -104,17 +125,39 @@ public class GameMain : MonoBehaviour
          * :param eleccion: String del elemento que selecciono el jugador, puede ser persona, lugar o arma
          * :return:         None
          */
-
-        if (eleccion == ASESINO[sospecha_actual])
+        if (FIN == false)
         {
-            GenerarFrases(true, eleccion);
+            if (eleccion == ASESINO[sospecha_actual])
+            {
+                GenerarFrases(true, eleccion);
+            }
+            else
+            {
+                GenerarFrases(false, eleccion);
+            }
+
+            SceneManager.LoadScene("Validar");
         }
         else
         {
-            GenerarFrases(false, eleccion);
-        }
+            ACUSACION[n_acusacion] = eleccion;
 
-        SceneManager.LoadScene("Validar");     
+            n_acusacion++;
+
+            if (n_acusacion < 3)
+                SceneManager.LoadScene(DICT_ELEMENTOS[n_acusacion]);
+            else
+            {
+                if (ACUSACION[0] == ASESINO[0] && ACUSACION[1] == ASESINO[1] && ACUSACION[2] == ASESINO[2])
+                    frase = "Acertaste";
+                else
+                    frase = "Fallaste";
+
+                Debug.Log(frase);
+                SceneManager.LoadScene("Fin");
+            }
+
+        }
     }
 
 
@@ -152,5 +195,9 @@ public class GameMain : MonoBehaviour
         }
 
     }
-        
+     
+    public void Salir()
+    {
+        Application.Quit();
+    }
 }

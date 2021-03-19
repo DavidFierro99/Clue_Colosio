@@ -13,9 +13,11 @@ public class GameSingleton : MonoBehaviour
 
     public string[][] INOCENTES;
 
+    public bool FIN;
+
     private static GameSingleton _instance;
 
-    public static GameSingleton Instance { get; private set; }
+    public static GameSingleton Instance { get;  set; }
 
     void Awake()
     {
@@ -26,6 +28,8 @@ public class GameSingleton : MonoBehaviour
         else
         {
             DontDestroyOnLoad(this.gameObject);
+
+            FIN = false;
 
             ASESINO = new string[] {SOSPECHOSOS[Random.Range(0, 5)],
                                     LUGARES[Random.Range(0, 5)],
