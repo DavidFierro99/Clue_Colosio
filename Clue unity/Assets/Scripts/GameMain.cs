@@ -64,7 +64,7 @@ public class GameMain : MonoBehaviour
             n_Text = GameObject.Find("/Canvas/n_preguntas").GetComponent<Text>();
             n_Text.text = PREGUNTAS_DISPONBILES.ToString();
 
-            if (PREGUNTAS_DISPONBILES == 0 && !FIN)
+            if (PREGUNTAS_DISPONBILES == 0)
             {
                 GameSingleton.Instance.FIN = true;
 
@@ -150,9 +150,10 @@ public class GameMain : MonoBehaviour
             else
             {
                 if (ACUSACION[0] == ASESINO[0] && ACUSACION[1] == ASESINO[1] && ACUSACION[2] == ASESINO[2])
-                    frase = "Acertaste";
+                    frase = "!Felicidades! \n\nGracias a tu grán trabajo se hizo justicia, eres genial";
                 else
-                    frase = "Fallaste";
+                    frase = "Fallaste\n\nEl asesino ha logrado salirse con la suya.\n\nCulpable: " + ASESINO[0] +
+                             "\nLugar: " + ASESINO[1] + "\nArma homicida: " + ASESINO[2];
 
                 Debug.Log(frase);
                 SceneManager.LoadScene("Fin");
